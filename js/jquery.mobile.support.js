@@ -70,6 +70,7 @@ $.extend( $.support, {
 	pushState: !!history.pushState,
 	mediaquery: $.mobile.media( "only all" ),
 	cssPseudoElement: !!propExists( "content" ),
+	overflowScrollingTouch: !!propExists( "overflowScrolling" ),
 	boxShadow: !!propExists( "boxShadow" ) && !bb,
 	scrollTop: ( "pageXOffset" in window || "scrollTop" in document.documentElement || "scrollTop" in fakeBody[ 0 ] ) && !webos,
 	dynamicBaseTag: baseTagTest(),
@@ -116,5 +117,11 @@ if ( nokiaLTE7_3 ) {
 if ( !$.support.boxShadow ) {
 	$( "html" ).addClass( "ui-mobile-nosupport-boxshadow" );
 }
+
+// For opting into touch overflow scrolling
+if( $.support.overflowScrollingTouch ){
+	$( "html" ).addClass( "ui-mobile-overflow-scrolling" );
+}
+
 
 })( jQuery );
