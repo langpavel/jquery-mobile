@@ -12,7 +12,6 @@
 /* responsive page widths */
 .ui-mobile-viewport {  margin: 0; overflow-x: hidden; -webkit-text-size-adjust: none; -ms-text-size-adjust:none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
-.ui-mobile-overflow-scrolling .ui-mobile-viewport { overflow: hidden; }
 
 /* "page" containers - full-screen views, one should always be in view post-pageload */
 .ui-mobile [data-role=page], .ui-mobile [data-role=dialog], .ui-page { top: 0; left: 0; width: 100%; min-height: 100%; position: absolute; display: none; border: 0; } 
@@ -34,7 +33,10 @@
 .ui-loader h1 { font-size: 15px; text-align: center; }
 .ui-loader .ui-icon { position: static; display: block; opacity: .9; margin: 0 auto; width: 35px; height: 35px; background-color: transparent; }
 
-.ui-mobile-overflow-scrolling .ui-page { overflow:hidden; -webkit-overflow-scrolling: touch; }
+.ui-mobile-overflow-scrolling .ui-page { overflow: auto; -webkit-overflow-scrolling: touch; }
+
+.ui-mobile-overflow-scrolling .ui-page.ui-mobile-internal-scroll { overflow: hidden; }
+.ui-mobile-overflow-scrolling .ui-page.ui-mobile-internal-scroll .ui-content { overflow: auto; -webkit-overflow-scrolling: touch; }
 
 /*fouc*/
 .ui-mobile-rendering > * { visibility: hidden; }

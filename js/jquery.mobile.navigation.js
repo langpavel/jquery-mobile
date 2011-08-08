@@ -394,11 +394,16 @@
 			toScroll = active.lastScroll || $.mobile.defaultHomeScroll,
 			screenHeight = getScreenHeight();
 
-		// Scroll to top
-		window.scrollTo( 0, $.mobile.defaultHomeScroll );
+		if( $.support.overflowScrollingTouch && fromPage ){
+			// Send focus to the newly shown page
+			$.mobile.silentScroll( toScroll, toPage );
+		}
+		else{
+			window.scrollTo( 0, $.mobile.defaultHomeScroll );
+		}
 
 		//if the Y location we're scrolling to is less than 10px, let it go for sake of smoothness
-		if( toScroll < $.mobile.minScrollBack ){
+		if( toScroll < $.mobile.minScrollBack && !$.support.overflowScrollingTouch ){
 			toScroll = 0;
 		}
 
@@ -406,8 +411,11 @@
 			//trigger before show/hide events
 			fromPage.data( "page" )._trigger( "beforehide", null, { nextPage: toPage } );
 		}
-		toPage
-			.height( screenHeight + toScroll )
+		if( !$.support.overflowScrollingTouch){
+			toPage.height( screenHeight + toScroll );
+		}	
+		
+		toPage	
 			.data( "page" )._trigger( "beforeshow", null, { prevPage: fromPage || $( "" ) } );
 
 		//clear page loader
@@ -420,15 +428,21 @@
 			promise = th( transition, reverse, toPage, fromPage );
 
 		promise.done(function() {
-			//reset toPage height bac
-			toPage.height( "" );
 			
-			// Send focus to the newly shown page
-			reFocus( toPage );
 			
-			// Jump to top or prev scroll, sometimes on iOS the page has not rendered yet.
-			$.mobile.silentScroll( toScroll );
+			if( $.support.overflowScrollingTouch ){
+				$.mobile.silentScroll( toScroll, toPage );
+			}
+			else{
+				//reset toPage height bac
+				toPage.height( "" );
+				
+				// Send focus to the newly shown page
+				reFocus( toPage );
 
+				// Jump to top or prev scroll, sometimes on iOS the page has not rendered yet.
+				$.mobile.silentScroll( toScroll );
+			}
 			//trigger show/hide events
 			if( fromPage ) {
 				fromPage.height("").data( "page" )._trigger( "hide", null, { nextPage: toPage } );
@@ -445,18 +459,23 @@
 	function getScreenHeight(){
 		var orientation 	= jQuery.event.special.orientationchange.orientation(),
 			port			= orientation === "portrait",
-			winMin			= port ? 480 : 320,
-			screenHeight	= port ? screen.availHeight : screen.availWidth,
+			winMin			= port ? 460 : 300,
+			screenHeight	= port ? document.documentElement.clientHeight || screen.availHeight : screen.availWidth || document.documentElement.clientWidth,
 			winHeight		= Math.max( winMin, $( window ).height() ),
 			pageMin			= Math.min( screenHeight, winHeight );
 
 		return pageMin;
 	}
+	
 
 	//simply set the active page's minimum height to screen height, depending on orientation
 	function resetActivePageHeight(){
-		$( "." + $.mobile.activePageClass ).css( "min-height", getScreenHeight() );
+		$( "." + $.mobile.activePageClass ).css( ( $.support.overflowScrollingTouch ? "height" : "min-height" ), getScreenHeight() );
 	}
+	
+	// TEMP TEMP 
+	$.mobile.getScreenHeight = getScreenHeight;
+	$.mobile.resetActivePageHeight = resetActivePageHeight;
 
 	//shared page enhancements
 	function enhancePage( $page, role ) {
@@ -893,8 +912,8 @@
 		}
 		
 		// Set active item's lastScroll prop
-		if( active ){
-			active.lastScroll = $( window ).scrollTop();
+		if( active && fromPage ){
+			active.lastScroll = $( ( $.support.overflowScrollingTouch ? fromPage : window ) ).scrollTop();
 		}
 
 		// Kill the keyboard.
