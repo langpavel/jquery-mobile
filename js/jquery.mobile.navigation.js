@@ -470,12 +470,8 @@
 
 	//simply set the active page's minimum height to screen height, depending on orientation
 	function resetActivePageHeight(){
-		$( "." + $.mobile.activePageClass ).css( ( $.support.overflowScrollingTouch ? "height" : "min-height" ), getScreenHeight() );
+		$( "." + $.mobile.activePageClass ).css( "min-height", getScreenHeight() );
 	}
-	
-	// TEMP TEMP 
-	$.mobile.getScreenHeight = getScreenHeight;
-	$.mobile.resetActivePageHeight = resetActivePageHeight;
 
 	//shared page enhancements
 	function enhancePage( $page, role ) {

@@ -33,10 +33,14 @@
 .ui-loader h1 { font-size: 15px; text-align: center; }
 .ui-loader .ui-icon { position: static; display: block; opacity: .9; margin: 0 auto; width: 35px; height: 35px; background-color: transparent; }
 
-.ui-mobile-overflow-scrolling .ui-page { overflow: auto; -webkit-overflow-scrolling: touch; }
 
-.ui-mobile-overflow-scrolling .ui-page.ui-mobile-internal-scroll { overflow: hidden; }
-.ui-mobile-overflow-scrolling .ui-page.ui-mobile-internal-scroll .ui-content { overflow: auto; -webkit-overflow-scrolling: touch; }
+/* DEMO DEMO DEMO */
+.ui-mobile.ui-mobile-overflow-scrolling .ui-page.ui-fixed-header { padding-top: 40px; }
+.ui-mobile.ui-mobile-overflow-scrolling .ui-page.ui-fixed-footer { padding-bottom: 50px; }
+.ui-mobile.ui-mobile-overflow-scrolling .ui-page .ui-content { overflow: scroll; -webkit-overflow-scrolling: touch; }
+.ui-mobile.ui-mobile-overflow-scrolling .ui-fixed-header .ui-header { position: fixed; top: 0; z-index: 100; }
+.ui-mobile.ui-mobile-overflow-scrolling .ui-fixed-footer .ui-footer { position: fixed; bottom: 0; }
+
 
 /*fouc*/
 .ui-mobile-rendering > * { visibility: hidden; }
